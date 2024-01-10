@@ -11,14 +11,28 @@ public class Client {
 		//Instantiation de la lecture des entrées
 		Scanner inputReader = new Scanner(System.in);
 		
-		// Adresse et port du serveur
-		System.out.println("Veuillez entrer votre adresse IP");
-		String serverAddress = inputReader.nextLine();
+		// Adresse IP
+		boolean isFormat = false;
+		String serverAddress = "";
+		while(!isFormat) {
+			System.out.println("Veuillez entrer votre adresse IP");
+			serverAddress = inputReader.nextLine();
+			
+			Pattern ipv4 = Pattern.compile("^(\\d{1,3}\\.){3}\\d{1,3}$");
+			Matcher ipMatcher = ipv4.matcher(serverAddress);
+			isFormat = ipMatcher.matches();
+			
+			String[] octets = serverAddress.split("\\.");
+			
+			for(String octet : octets) {
+				Integer number = Integer.parseInt(octet);
+				if(number >= 255) {
+					isFormat = false;
+				}
+			}
+		}
 		
-		Pattern ipv4 = Pattern.compile("^(\\d{1,3}\\.){3}\\d{1,3}$");
-		Matcher ipMatcher = ipv4.matcher(serverAddress);
-		boolean isFormat = ipMatcher.matches();
-		
+		// Port
 		System.out.println("Veuillez entrer le port auquel vous voulez accéder");
 		int port = inputReader.nextInt();
 		
