@@ -1,14 +1,26 @@
 import java.io.DataInputStream;
 import java.net.Socket;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Client {
 	private static Socket socket;
 	
-	public void main (String[] args) throws Exception {
+	public static void main (String[] args) throws Exception {
+		//Instantiation de la lecture des entrées
+		Scanner inputReader = new Scanner(System.in);
 		
 		// Adresse et port du serveur
-		String serverAddress = "127.0.0.1";
-		int port = 5000;
+		System.out.println("Veuillez entrer votre adresse IP");
+		String serverAddress = inputReader.nextLine();
+		
+		Pattern ipv4 = Pattern.compile("^(\\d{1,3}\\.){3}\\d{1,3}$");
+		Matcher ipMatcher = ipv4.matcher(serverAddress);
+		boolean isFormat = ipMatcher.matches();
+		
+		System.out.println("Veuillez entrer le port auquel vous voulez accéder");
+		int port = inputReader.nextInt();
 		
 		// Création d'une nouvelle connexion aves le serveur
 		socket = new Socket(serverAddress, port);
