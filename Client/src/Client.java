@@ -33,8 +33,19 @@ public class Client {
 		}
 		
 		// Port
-		System.out.println("Veuillez entrer le port auquel vous voulez accéder");
-		int port = inputReader.nextInt();
+		
+		boolean isValid = false;
+		int port = 0;
+		
+		while(!isValid) {
+			System.out.println("Veuillez entrer le port auquel vous voulez accéder");
+			port = inputReader.nextInt();
+			
+			if(port > 5000 && port < 5050) {
+				isValid = true;
+			}
+		}
+		
 		
 		// Création d'une nouvelle connexion aves le serveur
 		socket = new Socket(serverAddress, port);
