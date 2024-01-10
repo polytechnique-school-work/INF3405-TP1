@@ -15,7 +15,7 @@ public class Client {
 		boolean isFormat = false;
 		String serverAddress = "";
 		while(!isFormat) {
-			System.out.println("Veuillez entrer votre adresse IP");
+			System.out.println("Veuillez entrer votre adresse IP :");
 			serverAddress = inputReader.nextLine();
 			
 			Pattern ipv4 = Pattern.compile("^(\\d{1,3}\\.){3}\\d{1,3}$");
@@ -26,9 +26,13 @@ public class Client {
 			
 			for(String octet : octets) {
 				Integer number = Integer.parseInt(octet);
-				if(number >= 255) {
+				if(number > 255) {
 					isFormat = false;
 				}
+			}
+			
+			if(!isFormat) {
+				System.out.println("Vous devez entrer une adresse IPv4 valide!");
 			}
 		}
 		
@@ -38,11 +42,14 @@ public class Client {
 		int port = 0;
 		
 		while(!isValid) {
-			System.out.println("Veuillez entrer le port auquel vous voulez accéder");
+			System.out.println("Veuillez entrer le port auquel vous voulez accéder :");
 			port = inputReader.nextInt();
 			
-			if(port > 5000 && port < 5050) {
+			if(port >= 5000 && port <= 5050) {
 				isValid = true;
+			}
+			else {
+				System.out.println("Le port doit être entre 5000 et 5050");
 			}
 		}
 		
