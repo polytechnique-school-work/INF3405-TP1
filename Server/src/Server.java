@@ -17,25 +17,26 @@ public class Server {
 		
 		InputValidator inputValidator = new InputValidator();
 		
-		String ipAddress = inputValidator.validate("Vous devez entrer l'adresse IP du poste (ipv4):", checkIPRegex);
-		String port = inputValidator.validate("Vous devez entrer le port ([5000,5050]):", checkPort);
-		String username = inputValidator.validate("Vous devez entrer un nom d'utilisateur (Seulement des chiffres ou nombres):", checkUsername);
-		String password = inputValidator.validate("Vous devez entrer un mot de passe (Chiffre, nombre et caractères spéciaux, sans espace):", checkPassword);
+		String serverAddress = inputValidator.validate("Vous devez entrer l'adresse IP du poste (ipv4):", checkIPRegex);
+		String strServerPort = inputValidator.validate("Vous devez entrer le port ([5000,5050]):", checkPort);
+		// String username = inputValidator.validate("Vous devez entrer un nom d'utilisateur (Seulement des chiffres ou nombres):", checkUsername);
+		// String password = inputValidator.validate("Vous devez entrer un mot de passe (Chiffre, nombre et caractères spéciaux, sans espace):", checkPassword);
 		
 		
+		System.out.println("Démarrage du serveur...");
 		
 	
 		
-		/*int clientNumber = 0;
-		String serverAddress = "127.0.0.1";
-		int serverPort = 5000;
+		int clientNumber = 0;
+		int serverPort = Integer.parseInt(strServerPort);
+	
 		
 		try {
 			Listener = new ServerSocket();
 			Listener.setReuseAddress(true);
 			InetAddress serverIP = InetAddress.getByName(serverAddress);
 			Listener.bind(new InetSocketAddress(serverIP, serverPort));
-			System.out.format("The server is running on %s:%d%n", serverAddress, serverPort);
+			System.out.format("Le serveur est démarré sur %s:%d%n", serverAddress, serverPort);
 			
 			while(true) {
 				new ClientHandler(Listener.accept(), clientNumber++).start();
@@ -53,6 +54,6 @@ public class Server {
 			}
 		}
 		
-		*/
+		
 	}
 }
