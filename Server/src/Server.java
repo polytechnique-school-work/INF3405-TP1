@@ -12,20 +12,22 @@ public class Server {
 		// https://stackoverflow.com/questions/5284147/validating-ipv4-addresses-with-regexp
 		String checkIPRegex = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$";
 		String checkPort = "^50[0-4][0-9]|5050$";
-		String checkUsername = "^[A-Za-z0-9]+$";
-		String checkPassword = "^[A-Za-z0-9\\p{Punct}]+$";
+		// String checkUsername = "^[A-Za-z0-9]+$";
+		// String checkPassword = "^[A-Za-z0-9\\p{Punct}]+$";
 		
+		// Initialisation de certains éléments
 		InputValidator inputValidator = new InputValidator();
+		LoggerHandler loggerHandler = new LoggerHandler();
 		
+		// Enregistrement de l'adresse IP et du port de connection.
 		String serverAddress = inputValidator.validate("Vous devez entrer l'adresse IP du poste (ipv4):", checkIPRegex);
 		String strServerPort = inputValidator.validate("Vous devez entrer le port ([5000,5050]):", checkPort);
 		// String username = inputValidator.validate("Vous devez entrer un nom d'utilisateur (Seulement des chiffres ou nombres):", checkUsername);
 		// String password = inputValidator.validate("Vous devez entrer un mot de passe (Chiffre, nombre et caractères spéciaux, sans espace):", checkPassword);	
 		
+		inputValidator.closeScanner();
 		
 		System.out.println("Démarrage du serveur...");
-		
-		LoggerHandler loggerHandler = new LoggerHandler();
 		
 	
 		
@@ -46,13 +48,12 @@ public class Server {
 			}
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
+				// Est-ce qu'on devrait envoyer à tout le monde que le serveur s'est fermé?
 				Listener.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

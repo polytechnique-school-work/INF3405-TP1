@@ -23,6 +23,11 @@ public class LoggerHandler {
 		}	
 	}
 	
+	/*
+	 * Permet d'écrire dans le fichier messages.txt
+	 * @param text Message qui sera écrit dans le fichier.
+	 * @return
+	 * */
 	public void write(String text) {		
 		try {
 			PrintWriter printer = new PrintWriter(new FileWriter(file, true));
@@ -38,6 +43,11 @@ public class LoggerHandler {
 			
 	}
 	
+	/*
+	 * Permet de lire les nLines derniers messages
+	 * @param nLines Nombre de lignes à lire
+	 * @return List<String> contenant les lignes lues
+	 * */
 	public List<String> read(int nLines) {
 		List<String> lines = new ArrayList<String>();
 		
@@ -57,6 +67,13 @@ public class LoggerHandler {
 		return lines;
 	}
 	
+	/*
+	 * Permet de formater un message sous le format demandé
+	 * @param username Nom d'utilisateur
+	 * @param userAddress Addresse et port de l'utilisateur
+	 * @param message Message à envoyer
+	 * @return le message formaté
+	 * */
 	public String formatMessage(String username, String userAddress, String message) {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'@'HH:mm:ss");
         String date = simpleDateFormat.format(new Date());

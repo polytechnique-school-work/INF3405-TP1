@@ -19,6 +19,11 @@ public class AccountHandler {
 		}	
 	}
 	
+	/*
+	 * Permet d'écrire à l'intérieur du fichier accounts.gab
+	 * @param text sera écrit à l'intérieur du fichier, suivit d'un saut de ligne.
+	 * @return
+	 * */
 	private void write(String text) {		
 		try {
 			PrintWriter printer = new PrintWriter(new FileWriter(file, true));
@@ -34,8 +39,11 @@ public class AccountHandler {
 	}
 	
 	
-	// Si trouvé renvoie le password
-	// Sinon renvoie ""
+	/*
+	 * Permet de rechercher un utilisateur à l'intérieur de la "base de donnée".
+	 * @param name Nom de l'utilisateur à rechercher
+	 * @return le mot de passe de l'utilisateur s'il est présent, null sinon.
+	 * */
 	private String fetchUser(String name) {
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 			String line;
@@ -52,22 +60,33 @@ public class AccountHandler {
 		return "";
 	}
 	
-	// Renvoie true si le compte a été créé
-	// Renvoie false si c'est impossible de le créer
+	/*
+	 * Permet de créer un nouveau compte
+	 * @param username Nom d'utilisateur du compte à créer
+	 * @param password Mot de passe du compte à créer
+	 * @return true si le compte est créer, false sinon.
+	 * */
 	public boolean createAccount(String username, String password) {
 		if(hasAccount(username)) return false;
 		this.write(username + "," + password);
 		return true;
 	}
 	
-	// Renvoie true si l'utilisateur a un compte,
-	// Renvoie false sinon.
+	/*
+	 * Permet de vérifier si un utilisateur a un compte.
+	 * @param username Nom d'utilisateur du compte
+	 * @return true si l'utilisateur existe, false sinon.
+	 * */
 	public boolean hasAccount(String username) {
 		return this.fetchUser(username) != null;
 	}
 	
-	// Renvoie true si c'est les bons identifiants
-	// Renvoie false sinon.
+	/*
+	 * Permet de tenter le login d'un utilisateur
+	 * @param username Nom d'utilisateur du compte
+	 * @param password Mot de passe de l'utilisateur
+	 * @return true si la connection est réussie, false sinon.
+	 * */
 	public boolean login(String username, String password) {
 		return this.fetchUser(username).equals(password);
 	}

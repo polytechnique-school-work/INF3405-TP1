@@ -56,16 +56,18 @@ public class Client {
 		
 		// Création d'une nouvelle connexion aves le serveur
 		socket = new Socket(serverAddress, port);
-		System.out.format("Serveur lancé sur [%s:%d]", serverAddress, port);
+		System.out.format("Serveur lancé sur [%s:%d]\n", serverAddress, port);
 		
 		// Création d'un canal entrant pour recevoir les messages envoyés, par le serveur
 		DataInputStream in = new DataInputStream(socket.getInputStream());
 		
 		// Attente de la réception d'un message envoyé par le, server sur le canal
-		String helloMessageFromServer = in.readUTF();
-		System.out.println(helloMessageFromServer);
+		while(true) {
+			String helloMessageFromServer = in.readUTF();
+			System.out.println(helloMessageFromServer);
+		}
 		
 		// fermeture de La connexion avec le serveur
-		socket.close();
+		//socket.close();
 	}
 }
