@@ -5,7 +5,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class LoggerHandler {
@@ -53,5 +55,11 @@ public class LoggerHandler {
 			e.printStackTrace();
 		}
 		return lines;
+	}
+	
+	public String formatMessage(String username, String userAddress, String message) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'@'HH:mm:ss");
+        String date = simpleDateFormat.format(new Date());
+		return String.format("[ %s - %s - %s ] %s", username, userAddress, date, message);
 	}
 }

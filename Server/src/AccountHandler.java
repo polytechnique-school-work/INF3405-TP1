@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class AccountHandler {
-	private File file = new File("accounts.csv");
+	private File file = new File("accounts.gab");
 	AccountHandler() {
 		if(!file.exists()) {
 			try {
@@ -37,14 +37,13 @@ public class AccountHandler {
 	// Si trouvé renvoie le password
 	// Sinon renvoie ""
 	private String fetchUser(String name) {
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file));
+		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 			String line;
 			while((line = reader.readLine()) != null) {
 				String[] splitted = line.split(",");
 				String username = splitted[0];
 				String password = splitted[1];
-				if(username == name) return password;
+				if(username.equals(name)) return password;
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -64,12 +63,12 @@ public class AccountHandler {
 	// Renvoie true si l'utilisateur a un compte,
 	// Renvoie false sinon.
 	public boolean hasAccount(String username) {
-		return this.fetchUser(username) != "";
+		return this.fetchUser(username) != null;
 	}
 	
 	// Renvoie true si c'est les bons identifiants
 	// Renvoie false sinon.
 	public boolean login(String username, String password) {
-		return this.fetchUser(username) == password;
+		return this.fetchUser(username).equals(password);
 	}
 }

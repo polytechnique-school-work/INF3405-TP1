@@ -1,5 +1,4 @@
 import java.net.ServerSocket;
-import java.util.List;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -21,10 +20,12 @@ public class Server {
 		String serverAddress = inputValidator.validate("Vous devez entrer l'adresse IP du poste (ipv4):", checkIPRegex);
 		String strServerPort = inputValidator.validate("Vous devez entrer le port ([5000,5050]):", checkPort);
 		// String username = inputValidator.validate("Vous devez entrer un nom d'utilisateur (Seulement des chiffres ou nombres):", checkUsername);
-		// String password = inputValidator.validate("Vous devez entrer un mot de passe (Chiffre, nombre et caractères spéciaux, sans espace):", checkPassword);
+		// String password = inputValidator.validate("Vous devez entrer un mot de passe (Chiffre, nombre et caractères spéciaux, sans espace):", checkPassword);	
 		
 		
 		System.out.println("Démarrage du serveur...");
+		
+		LoggerHandler loggerHandler = new LoggerHandler();
 		
 	
 		
@@ -41,7 +42,7 @@ public class Server {
 			System.out.format("Le serveur est démarré sur %s:%d%n", serverAddress, serverPort);
 			
 			while(true) {
-				new ClientHandler(Listener.accept(), clientNumber++).start();
+				new ClientHandler(Listener.accept(), clientNumber++, loggerHandler).start();
 			}
 			
 		} catch (IOException e) {
