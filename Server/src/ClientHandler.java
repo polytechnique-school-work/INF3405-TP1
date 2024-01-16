@@ -30,9 +30,6 @@ public class ClientHandler extends Thread {
 			// Envoie des données d'annonce de connection au nouveau client
 			out = new DataOutputStream(socket.getOutputStream());
 			out.writeUTF("Connection au serveur effectuée, vous êtes le client #" + clientNumber);
-			out.writeUTF("Afin de vous authentifier, envoyez votre utilisateur et votre mot de passe");
-			out.writeUTF("sous le format suivant et ce sans espace: username,password");
-		
 			
 			// Permet de recevoir des données des clients
 			DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -53,7 +50,7 @@ public class ClientHandler extends Thread {
 					// S'il n'a pas encore de compte, on en crée un nouveau
 					// avec les informations donnés
 					if(!this.accountHandler.hasAccount(username)) {	
-						out.writeUTF("<OK> Bienvenue dans le système!");
+						out.writeUTF("<OK> Compte créé, bienvenue dans le système!");
 						this.accountHandler.createAccount(username, password);
 					}
 					
@@ -63,16 +60,17 @@ public class ClientHandler extends Thread {
 					if(!isLogged) {
 						// Impossible de se login (mauvais mot de passe)
 						out.writeUTF("<Error> Vous avez tapé un mauvais mot de passe."); 
+						continue;
 					} else {
 						// Login réussit, on set son nom d'utilisateur
 						// On lui envoie les 15 derniers messages
-						
+
 						this.username = username;
+						out.writeUTF("<OK> Rebonjour, " + username);
+						
 						List<String> messages = this.logger.read(15);
 						messages.forEach(t -> this.send(t));
 					}
-					
-					return;
 				}
 				
 				// L'utilisateur est logged, tout ce qu'il envoie est donc des messages

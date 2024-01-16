@@ -57,7 +57,7 @@ public class AccountHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "";
+		return null;
 	}
 	
 	/*

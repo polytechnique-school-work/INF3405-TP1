@@ -1,9 +1,6 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Client {
 	private static Socket socket;
@@ -20,12 +17,13 @@ public class Client {
 		DataInputStream in = new DataInputStream(socket.getInputStream());
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 		
+		String connexionMessage = in.readUTF();
+		System.out.println(connexionMessage);
 		
-		// Attente de la réception d'un message envoyé par le, server sur le canal
-		//while(true) {
-		//	String helloMessageFromServer = in.readUTF();
-		//	System.out.println(helloMessageFromServer);
-		//}
+		MessageHandler messageHandler = new MessageHandler(in, out);
+		
+		messageHandler.authentification(inputValidator);
+				
 		
 		// fermeture de La connexion avec le serveur
 		//socket.close();

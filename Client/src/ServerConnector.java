@@ -23,7 +23,6 @@ public class ServerConnector {
 			return connectToServer(inputValidator);
 		}
 
-		inputValidator.closeScanner();
 		System.out.format("Serveur lancé sur [%s:%s]\n", serverAddress, port);
 		return socket;
 	}

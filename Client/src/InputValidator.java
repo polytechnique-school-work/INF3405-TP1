@@ -12,7 +12,7 @@ public class InputValidator {
 	 * @param question Question à envoyer au client
 	 * @return
 	 * */
-	private String read(String question) {
+	public String read(String question) {
 		System.out.println(question);
 		return scanner.nextLine();
 	}
