@@ -66,7 +66,7 @@ public class ClientHandler extends Thread {
 						// On lui envoie les 15 derniers messages
 
 						this.username = username;
-						out.writeUTF("<OK> Rebonjour, " + username);
+						out.writeUTF("<OK> Bonjour, " + username);
 						
 						List<String> messages = this.logger.read(15);
 						messages.forEach(t -> this.send(t));
