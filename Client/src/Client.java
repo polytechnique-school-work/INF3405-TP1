@@ -1,5 +1,6 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -34,8 +35,8 @@ public class Client {
 				while(scanner.hasNext()) {
 					String input = scanner.nextLine();
 					try {
-						out.writeUTF(input);
-					} catch (IOException e) {
+						messageHandler.sendMessage(input);
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 						scanner.close();
@@ -47,20 +48,29 @@ public class Client {
 		
 		// Lecture des envoies serveur
 		CompletableFuture<Void> serverFuture = CompletableFuture.runAsync(() -> {
-			while(true) {
+			boolean isActive = true;
+			
+			while(isActive) {
 				try {
-					String message = in.readUTF();
-					System.out.println(message);
+					if(in.available() > 0) {
+						String message = in.readUTF();
+						System.out.println(message);
+					} else {
+						Thread.sleep(100);
+					}
+				} catch (EOFException e) {
+					isActive = false;
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					isActive = false;
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					break;
+					isActive = false;
 				}
 			}
 		});
 		
-		// Le thread principal sera bloqué jusqu'à la fin des 2.
-		CompletableFuture.allOf(scannerFuture, serverFuture).get();
+		// Bloquer le thread principal
+		while(true) {}
 	
 	}
 	
