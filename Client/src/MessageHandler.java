@@ -11,19 +11,23 @@ public class MessageHandler {
 	}
 	
 	public void authentification(InputValidator inputValidator) throws Exception {
-		String userInfo = inputValidator.read("Veuillez entrer un nom d'utilisateur puis un mot de passe sous le format suivant {username,password}: ");
-		if(!userInfo.contains(",")) {
-			System.out.println("Veuillez utiliser le format demandé");
-			authentification(inputValidator);
-		}
-		out.writeUTF(userInfo);
+		// Accepte tous les chiffres/lettres (au moins 1 caractère)
+		String checkUsername = "^[A-Za-z0-9]+$";
 		
-		String réponse = in.readUTF();
-		System.out.println(réponse);
+		// Accepte tous les chiffres/lettres avec certains caractères spéciaux (au moins 1 caractère)
+		String checkPassword = "^[A-Za-z0-9\\p{Punct}]+$";
+		String username = inputValidator.validate("Veuillez entrer votre nom d'utilisateur", checkUsername);
+		String password = inputValidator.validate("Veuillez entrer votre mot de passe", checkPassword);
+		String ACCEPT_CONNECTION = "<OK>";
 		
-		if(réponse.charAt(1) == 'O' && réponse.charAt(2) == 'K') {
-			return;
-		}
+		
+		// Récupérer la réponse qui nous concerne
+		this.sendMessage(username + ',' + password);
+		
+		String answer = this.in.readUTF();
+		System.out.println(answer);
+		
+		if(answer.startsWith(ACCEPT_CONNECTION)) return;
 		authentification(inputValidator);
 	}
 	

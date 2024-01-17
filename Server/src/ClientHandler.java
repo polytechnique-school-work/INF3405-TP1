@@ -59,19 +59,19 @@ public class ClientHandler extends Thread {
 					
 					if(!isLogged) {
 						// Impossible de se login (mauvais mot de passe)
-						out.writeUTF("<Error> Vous avez tapé un mauvais mot de passe."); 
+						out.writeUTF("<Error> Vous avez tapé un mauvais mot de passe, recommencez."); 
 						continue;
 					} else {
 						// Login réussit, on set son nom d'utilisateur
 						// On lui envoie les 15 derniers messages
 
 						this.username = username;
-						out.writeUTF("<OK> Rebonjour, " + username);
+						out.writeUTF("<OK> Bonjour, " + username);
 						
 						List<String> messages = this.logger.read(15);
 						messages.forEach(t -> this.send(t));
 					}
-					return;
+					continue;
 				}
 				
 				// L'utilisateur est logged, tout ce qu'il envoie est donc des messages
@@ -84,7 +84,6 @@ public class ClientHandler extends Thread {
 			
 		} catch (IOException e) {
 			System.out.println("Error handling client #" + clientNumber + ": " + e);
-			e.printStackTrace();
 		} finally {
 			try {
 				// Déconnection du client, on le retire de la liste des clients.
