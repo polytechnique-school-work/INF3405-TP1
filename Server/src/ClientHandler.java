@@ -71,6 +71,7 @@ public class ClientHandler extends Thread {
 						List<String> messages = this.logger.read(15);
 						messages.forEach(t -> this.send(t));
 					}
+					return;
 				}
 				
 				// L'utilisateur est logged, tout ce qu'il envoie est donc des messages

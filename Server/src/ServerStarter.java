@@ -5,6 +5,8 @@ import java.net.ServerSocket;
 public class ServerStarter {
 	public ServerSocket connect(InputValidator inputValidator, ServerSocket listener) {
 		
+		// Différents regex récupérés un peu partout sur internet, par exemple : 
+		// https://stackoverflow.com/questions/5284147/validating-ipv4-addresses-with-regexp
 		String checkIPRegex = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$";
 		String checkPort = "^50[0-4][0-9]|5050$";
 		
