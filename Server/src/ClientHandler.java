@@ -73,7 +73,7 @@ public class ClientHandler extends Thread {
 						List<String> messages = this.logger.read(15);
 						messages.forEach(t -> this.send(t));
 						
-						this.send("Bienvenue dans le serveur de clavardage. Pour terminer la connexion au serveur, écriver \"Bye\"");
+						this.send("Bienvenue dans le serveur de clavardage. Pour terminer la connexion au serveur, écrivez \"/disconnect\"");
 					}
 					continue;
 				}
@@ -81,6 +81,12 @@ public class ClientHandler extends Thread {
 				// L'utilisateur est logged, tout ce qu'il envoie est donc des messages
 				// On peut donc formatter son message et l'envoyer à tous les autres
 				// utilisateurs qui sont connectés.
+				
+				if(message == "%disconnect%") {
+					this.disconnect();
+					return;
+				}
+				
 				String formattedMessage = logger.formatMessage(username, port, socket.getInetAddress().toString(), message);
 				this.logger.write(formattedMessage);
 				ClientHandler.sendToAll(formattedMessage);
@@ -89,13 +95,8 @@ public class ClientHandler extends Thread {
 		} catch (IOException e) {
 			System.out.println("Error handling client #" + clientNumber + ": " + e);
 		} finally {
-			try {
-				// Déconnection du client, on le retire de la liste des clients.
-				socket.close();
-				ClientHandler.clients.remove(clientNumber);
-			} catch (IOException e) {
-				System.out.println("Cloudn't close a socket");
-			}
+			// Déconnection du client, on le retire de la liste des clients.
+			this.disconnect();
 			// Déconnection effectuée avec succès.
 			System.out.println("Connection with client #" + clientNumber + " closed.");
 		}
@@ -124,6 +125,19 @@ public class ClientHandler extends Thread {
 		ClientHandler.clients.forEach((clientNumber, clientHandler) -> {
 			clientHandler.send(message);
 		});
+	}
+	
+	private void disconnect() {
+		String disconnectMessage = "<Server> " + username + " disconnected.";
+		this.logger.write(disconnectMessage);
+		ClientHandler.sendToAll(disconnectMessage);
+		try {
+			this.socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ClientHandler.clients.remove(clientNumber);
 	}
 
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Client {
 	
@@ -25,29 +26,32 @@ public class Client {
 		
 		messageHandler.authentification(inputValidator);
 		
+		AtomicReference<Boolean> isActive = new AtomicReference<Boolean>(true);
+		
 		// Ok donc le but est de lire le scanner et de vérifier le readUTF en même temps.
 		
 		
 		// Lecture du scanner
 		CompletableFuture<Void> scannerFuture = CompletableFuture.runAsync(() -> {
 			Scanner scanner = new Scanner(System.in);
-			while(true) {
+			while(isActive.get()) {
 				while(scanner.hasNext()) {
 					String input = scanner.nextLine();
-					System.out.println(input);
-					if (input.equals("Bye")) {
+					if (input.equals("/disconnect")) {
 						try {
+							messageHandler.sendMessage("%disconnect%");
 							socket.close();
+							isActive.set(true);
+							System.out.println("Vous vous êtes déconnecté avec succès!");
 							break;
-						} catch (IOException e) {
+						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
 					try {
 						if(input.length() > 200) {
-							String reducedString = input.substring(0, 199);
-							messageHandler.sendMessage(reducedString);
+							System.out.println("Veuilez entrer un message ayant moins de 200 caractères: ");
 						}
 						else {
 							messageHandler.sendMessage(input);
@@ -64,9 +68,7 @@ public class Client {
 		
 		// Lecture des envoies serveur
 		CompletableFuture<Void> serverFuture = CompletableFuture.runAsync(() -> {
-			boolean isActive = true;
-			
-			while(isActive) {
+			while(isActive.get()) {
 				try {
 					if(in.available() > 0) {
 						String message = in.readUTF();
@@ -75,18 +77,18 @@ public class Client {
 						Thread.sleep(100);
 					}
 				} catch (EOFException e) {
-					isActive = false;
+					isActive.set(false);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
-					isActive = false;
+					isActive.set(false);
 				} catch (IOException e) {
-					isActive = false;
+					isActive.set(false);
 				}
 			}
 		});
 		
 		// Bloquer le thread principal
-		while(true) {}
+		while(isActive.get()) {}
 	
 	}
 	
