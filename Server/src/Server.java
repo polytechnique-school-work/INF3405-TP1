@@ -12,6 +12,7 @@ public class Server {
 		LoggerHandler loggerHandler = new LoggerHandler();
 		ServerStarter serverStarter = new ServerStarter();	
 		
+		
 		int clientNumber = 0;
 		
 		try {
@@ -20,7 +21,7 @@ public class Server {
 			Listener.setReuseAddress(true);
 			
 			while(true) {
-				new ClientHandler(Listener.accept(), clientNumber++, loggerHandler).start();
+				new ClientHandler(Listener.accept(), Listener.getLocalPort(), clientNumber++, loggerHandler).start();
 			}
 			
 		} catch (IOException e) {

@@ -34,8 +34,24 @@ public class Client {
 			while(true) {
 				while(scanner.hasNext()) {
 					String input = scanner.nextLine();
+					System.out.println(input);
+					if (input.equals("Bye")) {
+						try {
+							socket.close();
+							break;
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 					try {
-						messageHandler.sendMessage(input);
+						if(input.length() > 200) {
+							String reducedString = input.substring(0, 199);
+							messageHandler.sendMessage(reducedString);
+						}
+						else {
+							messageHandler.sendMessage(input);
+						}
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

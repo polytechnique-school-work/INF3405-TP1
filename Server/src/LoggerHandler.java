@@ -74,9 +74,9 @@ public class LoggerHandler {
 	 * @param message Message à envoyer
 	 * @return le message formaté
 	 * */
-	public String formatMessage(String username, String userAddress, String message) {
+	public String formatMessage(String username, int port, String userAddress, String message) {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'@'HH:mm:ss");
         String date = simpleDateFormat.format(new Date());
-		return String.format("[ %s - %s - %s ] %s", username, userAddress, date, message);
+		return String.format("[%s - %s - %s]: %s", username, userAddress+":"+port, date, message);
 	}
 }

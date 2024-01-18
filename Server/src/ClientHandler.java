@@ -15,7 +15,9 @@ public class ClientHandler extends Thread {
 	private DataOutputStream out;
 	private LoggerHandler logger;
 	private String username;
-	public ClientHandler(Socket socket, int clientNumber, LoggerHandler logger) {
+	private int port;
+	public ClientHandler(Socket socket, int port, int clientNumber, LoggerHandler logger) {
+		this.port = port;
 		this.socket = socket;
 		this.clientNumber = clientNumber;
 		this.accountHandler = new AccountHandler();
@@ -59,7 +61,7 @@ public class ClientHandler extends Thread {
 					
 					if(!isLogged) {
 						// Impossible de se login (mauvais mot de passe)
-						out.writeUTF("<Error> Vous avez tapé un mauvais mot de passe, recommencez."); 
+						out.writeUTF("<Error> Erreur dans la saisie du mot de passe."); 
 						continue;
 					} else {
 						// Login réussit, on set son nom d'utilisateur
@@ -70,6 +72,8 @@ public class ClientHandler extends Thread {
 						
 						List<String> messages = this.logger.read(15);
 						messages.forEach(t -> this.send(t));
+						
+						this.send("Bienvenue dans le serveur de clavardage. Pour terminer la connexion au serveur, écriver \"Bye\"");
 					}
 					continue;
 				}
@@ -77,7 +81,7 @@ public class ClientHandler extends Thread {
 				// L'utilisateur est logged, tout ce qu'il envoie est donc des messages
 				// On peut donc formatter son message et l'envoyer à tous les autres
 				// utilisateurs qui sont connectés.
-				String formattedMessage = logger.formatMessage(username, socket.getInetAddress().toString(), message);
+				String formattedMessage = logger.formatMessage(username, port, socket.getInetAddress().toString(), message);
 				this.logger.write(formattedMessage);
 				ClientHandler.sendToAll(formattedMessage);
 			}
