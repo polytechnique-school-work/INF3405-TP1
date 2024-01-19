@@ -5,6 +5,13 @@ public class Server {
 
 	private static ServerSocket Listener;
 	public static void main(String[] args) {
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				endProcess();
+			}
+		});
 
 		
 		// Initialisation de certains éléments
@@ -27,13 +34,16 @@ public class Server {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				Listener.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			endProcess();
 		}
-		
-		
+	}
+	
+	public static void endProcess() {
+		ClientHandler.sendToAll("<Server> Fermeture du serveur.");
+		try {
+			Listener.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

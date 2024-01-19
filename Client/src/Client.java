@@ -34,7 +34,7 @@ public class Client {
 		CompletableFuture.runAsync(() -> {
 			Scanner scanner = new Scanner(System.in);
 			while(isActive.get()) {
-				while(scanner.hasNext()) {
+				while(isActive.get() && scanner.hasNext()) {
 					String input = scanner.nextLine();
 					if (input.equals("/disconnect")) {
 						try {
@@ -55,8 +55,8 @@ public class Client {
 							messageHandler.sendMessage(input);
 						}
 					} catch (Exception e) {
-						e.printStackTrace();
 						scanner.close();
+						System.exit(0);
 						break;
 					}
 				}
@@ -69,6 +69,9 @@ public class Client {
 				try {
 					if(in.available() > 0) {
 						String message = in.readUTF();
+						if(message == "<Server> Fermeture du serveur.") {
+							isActive.set(false);
+						}
 						System.out.println(message);
 					} else {
 						Thread.sleep(100);
@@ -86,6 +89,7 @@ public class Client {
 		
 		// Bloquer le thread principal
 		while(isActive.get()) {}
+
 	}
 	
 }
