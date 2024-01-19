@@ -64,3 +64,8 @@ local.properties
 Server/messages.txt
 
 Server/accounts.gab
+
+messages.txt
+accounts.gab
+Server.jar
+Client.jar
