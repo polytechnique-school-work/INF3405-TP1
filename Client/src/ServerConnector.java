@@ -15,7 +15,7 @@ public class ServerConnector {
 			
 		// Essai d'une nouvelle connexion avec le serveur
 		Socket socket;
-		try{
+		try {
 			socket = new Socket(serverAddress, Integer.parseInt(port));
 		}
 		catch(Exception e){

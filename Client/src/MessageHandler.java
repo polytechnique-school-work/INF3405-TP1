@@ -31,7 +31,12 @@ public class MessageHandler {
 		authentification(inputValidator);
 	}
 	
-	public void sendMessage(String message) throws Exception{
+	/*
+	 * Envoyer un message au serveur
+	 * @param message Message à envoyer
+	 * @return
+	 * */
+	public void sendMessage(String message) throws Exception {
 		out.writeUTF(message);
 	}
 }

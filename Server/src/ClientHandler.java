@@ -127,6 +127,10 @@ public class ClientHandler extends Thread {
 		});
 	}
 	
+	/*
+	 * Permet de déconnecter un utilisateur comme il faut.
+	 * @return
+	 * */
 	private void disconnect() {
 		String disconnectMessage = "<Server> " + username + " disconnected.";
 		this.logger.write(disconnectMessage);
@@ -134,7 +138,6 @@ public class ClientHandler extends Thread {
 		try {
 			this.socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		ClientHandler.clients.remove(clientNumber);

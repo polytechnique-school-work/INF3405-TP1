@@ -30,9 +30,8 @@ public class Client {
 		
 		// Ok donc le but est de lire le scanner et de vérifier le readUTF en même temps.
 		
-		
 		// Lecture du scanner
-		CompletableFuture<Void> scannerFuture = CompletableFuture.runAsync(() -> {
+		CompletableFuture.runAsync(() -> {
 			Scanner scanner = new Scanner(System.in);
 			while(isActive.get()) {
 				while(scanner.hasNext()) {
@@ -45,7 +44,6 @@ public class Client {
 							System.out.println("Vous vous êtes déconnecté avec succès!");
 							break;
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -57,7 +55,6 @@ public class Client {
 							messageHandler.sendMessage(input);
 						}
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 						scanner.close();
 						break;
@@ -67,7 +64,7 @@ public class Client {
 		});
 		
 		// Lecture des envoies serveur
-		CompletableFuture<Void> serverFuture = CompletableFuture.runAsync(() -> {
+		CompletableFuture.runAsync(() -> {
 			while(isActive.get()) {
 				try {
 					if(in.available() > 0) {
@@ -89,7 +86,6 @@ public class Client {
 		
 		// Bloquer le thread principal
 		while(isActive.get()) {}
-	
 	}
 	
 }

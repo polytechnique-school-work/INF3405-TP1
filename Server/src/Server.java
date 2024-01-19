@@ -28,7 +28,6 @@ public class Server {
 			e.printStackTrace();
 		} finally {
 			try {
-				// Est-ce qu'on devrait envoyer à tout le monde que le serveur s'est fermé?
 				Listener.close();
 			} catch (IOException e) {
 				e.printStackTrace();
