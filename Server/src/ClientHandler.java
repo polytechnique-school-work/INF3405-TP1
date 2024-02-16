@@ -2,6 +2,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,21 +79,25 @@ public class ClientHandler extends Thread {
 					continue;
 				}
 				
+				// Si on reçoit %disconnect% c'est que l'utilisateur a voulu se déconnecter.
+				if(message == "%disconnect%") {
+					continue;
+				}
+				
 				// L'utilisateur est logged, tout ce qu'il envoie est donc des messages
 				// On peut donc formatter son message et l'envoyer à tous les autres
 				// utilisateurs qui sont connectés.
-				
-				if(message == "%disconnect%") {
-					this.disconnect();
-					return;
-				}
-				
 				String formattedMessage = logger.formatMessage(username, port, socket.getInetAddress().toString(), message);
 				this.logger.write(formattedMessage);
 				ClientHandler.sendToAll(formattedMessage);
 			}
 			
-		} catch (IOException e) {
+		}
+		
+		catch (SocketException e) {
+			System.out.println("Client #" + clientNumber + " has disconnected.");
+		}
+		catch (IOException e) {
 			System.out.println("Error handling client #" + clientNumber + ": " + e);
 		} finally {
 			// Déconnection du client, on le retire de la liste des clients.
@@ -134,13 +139,13 @@ public class ClientHandler extends Thread {
 	private void disconnect() {
 		String disconnectMessage = "<Server> " + username + " disconnected.";
 		this.logger.write(disconnectMessage);
+		ClientHandler.clients.remove(clientNumber);
 		ClientHandler.sendToAll(disconnectMessage);
 		try {
 			this.socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		ClientHandler.clients.remove(clientNumber);
 	}
 
 }
